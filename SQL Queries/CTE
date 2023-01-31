@@ -1,4 +1,4 @@
--- This is to create the top 5 customers using CTE. We can do this by creating an alias for the CTE using the clause WITH. This CTE will create a result set (or a table) which you can perform the main query on by using the SELECT for any aggregate values that you need from the table and FROM the referenced CTE table. The column list in the CTE query is optional when distinct names for all resulting columns are supplied in the query definition
+-- This is an example of the same subqueries code written in CTE. The following code is to create the top 5 customers using CTE. We can do this by creating an alias for the CTE using the clause WITH. 
 
 WITH top5customer_cte AS
 	(SELECT 
