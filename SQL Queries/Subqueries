@@ -1,0 +1,63 @@
+-- This is a code to find the average amount paid by the Top 5 customers. This uses input of the cities from the previous code.
+
+SELECT AVG(top5_customer.total_amount_paid) AS average_top5_amount
+FROM 
+	(SELECT 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		d.country,
+		c.city,
+		SUM(e.amount) AS total_amount_paid
+	FROM customer a
+	INNER JOIN address b ON a.address_id = b.address_id
+	INNER JOIN city c ON b.city_id = c.city_id
+	INNER JOIN country d ON c.country_id = d.country_id
+	INNER JOIN payment e ON a.customer_id = e.customer_id
+	WHERE c.city IN ('Aurora','Atlixco','Xintai', 'Adoni', 'Dhule (Dhulia)', 'Kurshiki','Pingxiang','Sivas','Celaya','So Leopoldo')
+	GROUP BY 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		c.city,
+		d.country
+	ORDER BY total_amount_paid DESC
+	LIMIT 5) AS top5_customer
+
+
+-- This is a code to how many of the top 5 customers are based within each country using Subqueries.
+-- This requires the  multiple value result table of the top 5 customers, and specific cities and countries from the previous code.
+
+SELECT 
+	d.country,
+	COUNT (a.customer_id) AS all_customer_count,
+	COUNT (DISTINCT top5_customer.customer_id) AS top_customer_count
+FROM 
+	customer a
+INNER JOIN address b ON a.address_id = b.address_id
+INNER JOIN city c ON b.city_id = c.city_id
+INNER JOIN country d ON c.country_id = d.country_id
+LEFT JOIN 
+	(SELECT 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		d.country,
+		c.city,
+		SUM(e.amount) AS total_amount_paid
+	FROM customer a
+	INNER JOIN address b ON a.address_id = b.address_id
+	INNER JOIN city c ON b.city_id = c.city_id
+	INNER JOIN country d ON c.country_id = d.country_id
+	INNER JOIN payment e ON a.customer_id = e.customer_id
+	WHERE c.city IN ('Aurora','Atlixco','Xintai', 'Adoni', 'Dhule (Dhulia)', 'Kurshiki','Pingxiang','Sivas','Celaya','So Leopoldo')
+	GROUP BY 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		c.city,
+		d.country
+	ORDER BY total_amount_paid DESC
+	LIMIT 5) AS top5_customer ON top5_customer.country = d.country
+GROUP BY d.country
+ORDER BY top_customer_count DESC
