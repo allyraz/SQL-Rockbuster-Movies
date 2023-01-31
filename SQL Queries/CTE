@@ -1,0 +1,71 @@
+-- This is to create the top 5 customers using CTE. We can do this by creating an alias for the CTE using the clause WITH. This CTE will create a result set (or a table) which you can perform the main query on by using the SELECT for any aggregate values that you need from the table and FROM the referenced CTE table. The column list in the CTE query is optional when distinct names for all resulting columns are supplied in the query definition
+
+WITH top5customer_cte AS
+	(SELECT 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		d.country,
+		c.city,
+		SUM(e.amount) AS total_amount_paid
+	FROM customer a
+		INNER JOIN address b ON a.address_id = b.address_id
+		INNER JOIN city c ON b.city_id = c.city_id
+		INNER JOIN country d ON c.country_id = d.country_id
+		INNER JOIN payment e ON a.customer_id = e.customer_id
+	WHERE c.city IN ('Aurora','Atlixco','Xintai', 'Adoni', 'Dhule (Dhulia)', 'Kurshiki','Pingxiang','Sivas','Celaya','So Leopoldo')
+	GROUP BY 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		c.city,
+		d.country
+	ORDER BY total_amount_paid DESC
+	LIMIT 5)
+SELECT AVG(total_amount_paid) as avg_amount_paid
+FROM top5customer_cte
+
+
+-- Finding how many of the top 5 customers are based within each country using CTE
+
+WITH top5customer_cte AS
+	(SELECT 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		d.country,
+		c.city,
+		SUM(e.amount) AS total_amount_paid,
+	 	COUNT(DISTINCT a.customer_id) AS number_of_customers
+	FROM customer a
+		INNER JOIN address b ON a.address_id = b.address_id
+		INNER JOIN city c ON b.city_id = c.city_id
+		INNER JOIN country d ON c.country_id = d.country_id
+		INNER JOIN payment e ON a.customer_id = e.customer_id
+	WHERE c.city IN ('Aurora','Atlixco','Xintai', 'Adoni', 'Dhule (Dhulia)', 'Kurshiki','Pingxiang','Sivas','Celaya','So Leopoldo')
+	GROUP BY 
+		a.customer_id,
+		a.first_name,
+		a.last_name,
+		c.city,
+		d.country
+	ORDER BY total_amount_paid DESC
+	LIMIT 5),
+
+	all_cusomer_cte AS
+	(SELECT 
+		d.country,		
+ 		count(distinct a.customer_id) AS all_customer_count
+	FROM customer a
+		INNER JOIN address b ON a.address_id = b.address_id
+		INNER JOIN city c ON b.city_id = c.city_id
+		INNER JOIN country d ON c.country_id = d.country_id
+		INNER JOIN payment e ON a.customer_id = e.customer_id
+	GROUP BY 
+			d.country
+	ORDER BY all_customer_count DESC)
+SELECT all_cusomer_cte.country, all_cusomer_cte.all_customer_count, count (distinct top5customer_cte.customer_id) AS number_of_top5_customers
+FROM all_cusomer_cte
+	LEFT JOIN top5customer_cte ON top5customer_cte.country=all_cusomer_cte.country
+GROUP BY all_cusomer_cte.country, all_cusomer_cte.all_customer_count
+ORDER BY number_of_top5_customers DESC
