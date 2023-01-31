@@ -1,2 +1,2 @@
 # SQL-Rockbuster-Movies
-This is a fictional Business Intelligence analysis on a movie streaming company
+This is a fictional Business Intelligence analysis on a movie rental company
