@@ -25,7 +25,7 @@ FROM
 	LIMIT 5) AS top5_customer
 
 
--- This is a code to how many of the top 5 customers are based within each country using Subqueries.
+-- This is a code to identify how many of the top 5 customers are based within each country using Subqueries.
 -- This requires the  multiple value result table of the top 5 customers, and specific cities and countries from the previous code.
 
 SELECT 
