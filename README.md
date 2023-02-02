@@ -8,7 +8,7 @@ The objective of this analysis is to present data analysis and insights on Rockb
 The dataset rests in a SQL database and a data dictonary has been created as a part of this analysis
 
 ## Analysis
-SQL analysis were conducted using PostgreSQL. Codes are attached under SQL Queries folder.
+Data were queried using PostgreSQL. Codes can be found under SQL Queries folder.
 
 ## Findings
 Findings are documented in a presentation deck and is attached in this repository
