@@ -1,4 +1,4 @@
--- This is a code to find the average amount paid by the Top 5 customers. This uses input of the cities from the previous code.
+-- This is a code to find the average amount paid by the Top 5 customers. This uses input of the cities identified from the previous code.
 
 SELECT AVG(top5_customer.total_amount_paid) AS average_top5_amount
 FROM 
