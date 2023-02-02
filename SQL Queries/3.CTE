@@ -1,4 +1,4 @@
--- This is an example of the same subqueries code written in CTE. The following code is to create the top 5 customers using CTE. We can do this by creating an alias for the CTE using the clause WITH. 
+-- This is an example of the previous subqueries code written in CTE. The following code is to create the top 5 customers using CTE. We can do this by creating an alias for the CTE using the clause WITH. 
 
 WITH top5customer_cte AS
 	(SELECT 
